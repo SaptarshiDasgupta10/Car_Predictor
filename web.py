@@ -2,10 +2,12 @@ from flask import Flask,render_template,request,redirect
 import sklearn
 import numpy as np
 import pandas as pd
+from flask_cors import CORS,cross_origin
 
 import pickle
 
 app = Flask(__name__)
+cors=CORS(app)
 
 model = pickle.load(open('LinearRegressionModel1.pkl','rb'))
 car = pd.read_csv('cleaned_car_1.csv')
@@ -32,7 +34,7 @@ def predict():
 
     prediction = model.predict(pd.DataFrame(columns=['name', 'company', 'year', 'kms_driven', 'fuel_type'],
                                             data=np.array([car_model, company, year, driven, fuel_type]).reshape(1, 5)))
-    return str(prediction[0])
+    return str(np.round(prediction[0],2))
 
 
 
